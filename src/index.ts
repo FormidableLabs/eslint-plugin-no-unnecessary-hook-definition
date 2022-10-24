@@ -1,7 +1,7 @@
 import { rule } from "./no-unnecessary-hook-def";
 
-export default {
+export = {
   rules: {
-    "no-unnecessary-hook-definition": rule,
+    rule,
   },
 };
