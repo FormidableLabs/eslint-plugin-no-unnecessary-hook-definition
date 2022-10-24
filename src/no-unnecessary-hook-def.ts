@@ -2,6 +2,7 @@ import traverse from "eslint-traverse";
 import { Rule } from "eslint";
 
 export const rule: Rule.RuleModule = {
+  // TODO: Round this out.
   meta: {
     type: "problem",
   },

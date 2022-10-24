@@ -2,8 +2,22 @@
   "name": "eslint-plugin-no-unnecessary-hook-definition",
   "private": false,
   "version": "0.0.1",
-  "main": "index.js",
   "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": [
+      {
+        "import": "./dist/index.mjs",
+        "default": "./dist/index.js"
+      },
+      "./dist/index.js"
+    ],
+    "./package.json": "./package.json"
+  },
   "devDependencies": {
     "@types/eslint": "^8.4.7",
     "eslint": "^8.26.0",
@@ -21,6 +35,9 @@
   "scripts": {
     "test": "tsup ./src/no-unnecessary-hook-def.spec.ts --outDir .test --onSuccess 'node ./.test/no-unnecessary-hook-def.spec.js'",
     "test:watch": "yarn test --watch",
-    "build": "tsup ./src/index.ts --outDir dist --format esm,cjs"
+    "build": "tsup ./src/index.ts --outDir dist --format esm,cjs",
+    "preversion": "yarn test",
+    "prepack": "yarn build",
+    "prepublishOnly": "yarn build"
   }
 }
