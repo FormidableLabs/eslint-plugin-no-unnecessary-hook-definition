@@ -31,22 +31,22 @@ ruleTester.run("foo", Rule, {
 	],
 
 	invalid: [
-		// {
-		// 	code: `const useName = (person) => {
-		// 		return person.name;
-		// 	}`,
-		// 	errors: [{}]
-		// },
-		// {
-		// 	code: `const useName = (person) => person.name;`,
-		// 	errors: [{}]
-		// },
-		// {
-		// 	code: `const useName = function(person){
-		// 		return person.name;
-		// 	}`,
-		// 	errors: [{}]
-		// },
+		{
+			code: `const useName = (person) => {
+				return person.name;
+			}`,
+			errors: [{}]
+		},
+		{
+			code: `const useName = (person) => person.name;`,
+			errors: [{}]
+		},
+		{
+			code: `const useName = function(person){
+				return person.name;
+			}`,
+			errors: [{}]
+		},
 		{
 			code: `function useName(person) {
 				return person.name
