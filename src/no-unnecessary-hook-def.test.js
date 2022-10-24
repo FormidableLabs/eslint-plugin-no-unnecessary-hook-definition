@@ -49,6 +49,14 @@ ruleTester.run("foo", Rule, {
 				Namespace.useOtherThing();
 			}`
 		},
+
+		// Make sure this isn't impacting other "things"
+		{
+			code: `const x = 13;`
+		},
+		{
+			code: `const useTheForce = true;`
+		}
 	],
 
 	invalid: [
