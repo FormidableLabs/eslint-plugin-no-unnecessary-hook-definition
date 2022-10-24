@@ -10,24 +10,45 @@ const ruleTester = new RuleTester({
 
 ruleTester.run("foo", Rule, {
 	valid: [
+		// Calling hook from plain 'ol fn.
 		{
-			code: `const x = 3;`
+			code: `const useThing = () => {
+				useEffect();
+			}`
 		},
-		// {
-		// 	code: `const useThing = () => {
-		// 		const f = useOtherThing();
-		// 	}`
-		// },
-		// {
-		// 	code: `const useThing = function() {
-		// 		const f = useOtherThing();
-		// 	}`
-		// },
-		// {
-		// 	code: `function useThing() {
-		// 		const f = useOtherThing();
-		// 	}`
-		// }
+		{
+			code: `const useThing = () => useMyOtherThing();`
+		},
+		{
+			code: `const useThing = function() {
+				useEffect();
+			}`
+		},
+		{
+			code: `function useThing() {
+				useEffect();
+			}`
+		},
+
+		// Calling hook from Object method.
+		{
+			code: `const useThing = () => {
+				Namespace.useOtherThing();
+			}`
+		},
+		{
+			code: `const useThing = () => Namespace.useOtherThing();`
+		},
+		{
+			code: `const useThing = function(){
+				Namespace.useOtherThing();
+			}`
+		},
+		{
+			code: `function useThing(){
+				Namespace.useOtherThing();
+			}`
+		},
 	],
 
 	invalid: [
@@ -52,6 +73,6 @@ ruleTester.run("foo", Rule, {
 				return person.name
 			}`,
 			errors: [{}]
-		}
+		},
 	]
 })
