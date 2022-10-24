@@ -9,6 +9,7 @@
     "eslint": "^8.26.0",
     "prettier": "^2.7.1",
     "ts-node": "^10.9.1",
+    "tsup": "^6.3.0",
     "typescript": "^4.8.4"
   },
   "peerDependencies": {
@@ -18,6 +19,8 @@
     "eslint-traverse": "^1.0.0"
   },
   "scripts": {
-    "test": "tsc --project tsconfig.test.json && node ./.test/no-unnecessary-hook-def.spec.js"
+    "test": "tsup ./src/no-unnecessary-hook-def.spec.ts --outDir .test --onSuccess 'node ./.test/no-unnecessary-hook-def.spec.js'",
+    "test:watch": "yarn test --watch",
+    "build": "tsup ./src/index.ts --outDir dist --format esm,cjs"
   }
 }
