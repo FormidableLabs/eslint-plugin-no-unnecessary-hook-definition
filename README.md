@@ -7,6 +7,7 @@ This library contains a simple ESLint plugin with a single rule to disallow defi
 This rule ensures your codebase is not littered with "fake hooks" like the following:
 
 ```js
+// ❌ This will get flagged
 const useFirstName = (person) => {
   return person.firstName;
 };
