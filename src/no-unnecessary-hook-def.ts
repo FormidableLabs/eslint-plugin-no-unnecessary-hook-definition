@@ -62,7 +62,7 @@ export const rule: Rule.RuleModule = {
         if (!body) return;
 
         // No hook call? Naughty naughty
-        if (!hasCalledHook(body)) {
+        if (!hasCalledHook(body as Rule.Node)) {
           context.report({
             node,
             message: `This function does not call another hook. Avoiding the \`use\` prefix; consider the name \`${stripUsePrefix(
@@ -81,7 +81,6 @@ type IdentifierNode = Parameters<
 type VariableDeclaratorNode = Parameters<
   NonNullable<Rule.NodeListener["VariableDeclarator"]>
 >[0];
-type BodyType = NonNullable<ReturnType<typeof getPotentialHookBody>>;
 
 /**
  * same logic that Facebook uses: https://github.com/facebook/react/blob/e7c5af45ceb8fa2b64d39ec68345254ce9abd65e/packages/eslint-plugin-react-hooks/src/RulesOfHooks.js#L18-L23
