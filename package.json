@@ -20,6 +20,8 @@
   },
   "devDependencies": {
     "@types/eslint": "^8.4.7",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
     "eslint": "^8.26.0",
     "prettier": "^2.7.1",
     "ts-node": "^10.9.1",
@@ -33,6 +35,8 @@
     "eslint-traverse": "^1.0.0"
   },
   "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/**",
     "test": "tsup ./src/no-unnecessary-hook-def.spec.ts --outDir .test --onSuccess 'node ./.test/no-unnecessary-hook-def.spec.js'",
     "test:watch": "yarn test --watch",
     "build": "tsup ./src/index.ts --outDir dist --format esm,cjs",

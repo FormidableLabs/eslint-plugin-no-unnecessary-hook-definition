@@ -2,9 +2,12 @@ import traverse from "eslint-traverse";
 import { Rule } from "eslint";
 
 export const rule: Rule.RuleModule = {
-  // TODO: Round this out.
   meta: {
-    type: "problem",
+    type: "suggestion",
+    docs: {
+      description: "disallow unnecessary React hook function definitions",
+      url: "https://github.com/FormidableLabs/eslint-plugin-no-unnecessary-hook-definition/",
+    },
   },
   create(context) {
     return {
@@ -36,7 +39,12 @@ export const rule: Rule.RuleModule = {
 
         // No hook call? Naughty naughty
         if (!hasCalledHook) {
-          context.report({ node, message: "Bad boy" });
+          context.report({
+            node,
+            message: `This function does not call another hook. Avoiding the \`use\` prefix; consider the name \`${stripUsePrefix(
+              node.name
+            )}\` instead.`,
+          });
         }
       },
     };
@@ -69,12 +77,10 @@ function getPotentialHookBody(node: IdentifierNode) {
   ) {
     return node.parent.init;
   }
-  // @ts-ignore
   if (
     node?.parent?.type === "FunctionDeclaration" &&
     node?.parent?.body?.type === "BlockStatement"
   ) {
-    // @ts-ignore
     return node.parent.body;
   }
 }
@@ -82,3 +88,8 @@ function getPotentialHookBody(node: IdentifierNode) {
 const isVariableDeclaratorNode = (
   node: Rule.Node
 ): node is VariableDeclaratorNode => node?.type === "VariableDeclarator";
+
+const stripUsePrefix = (name: string) => {
+  const stripped = name.replace(/^use([A-Z0-9].*)$/, "$1");
+  return stripped[0].toLowerCase() + stripped.substring(1);
+};
