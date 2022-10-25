@@ -20,33 +20,33 @@ ruleTester.run("foo", rule, {
     },
     {
       code: `const useThing = function() {
-				useEffect();
-			}`,
+    		useEffect();
+    	}`,
     },
     {
       code: `function useThing() {
-				useEffect();
-			}`,
+    		useEffect();
+    	}`,
     },
 
     // Calling hook from Object method.
     {
       code: `const useThing = () => {
-				Namespace.useOtherThing();
-			}`,
+    		Namespace.useOtherThing();
+    	}`,
     },
     {
       code: `const useThing = () => Namespace.useOtherThing();`,
     },
     {
       code: `const useThing = function(){
-				Namespace.useOtherThing();
-			}`,
+    		Namespace.useOtherThing();
+    	}`,
     },
     {
       code: `function useThing(){
-				Namespace.useOtherThing();
-			}`,
+    		Namespace.useOtherThing();
+    	}`,
     },
 
     // Make sure this isn't impacting other "things"
@@ -71,14 +71,14 @@ ruleTester.run("foo", rule, {
     },
     {
       code: `const useName = function(person){
-				return person.name;
-			}`,
+    		return person.name;
+    	}`,
       errors: [{}],
     },
     {
       code: `function useName(person) {
-				return person.name
-			}`,
+    		return person.name
+    	}`,
       errors: [{}],
     },
   ],

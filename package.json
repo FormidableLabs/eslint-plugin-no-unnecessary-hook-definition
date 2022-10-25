@@ -46,9 +46,6 @@
   "peerDependencies": {
     "eslint": ">=7.0.0 || >=8.0.0"
   },
-  "dependencies": {
-    "eslint-traverse": "^1.0.0"
-  },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/**",

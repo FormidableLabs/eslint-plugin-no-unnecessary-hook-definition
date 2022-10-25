@@ -1,4 +1,3 @@
-import traverse from "eslint-traverse";
 import { Rule } from "eslint";
 
 export const rule: Rule.RuleModule = {
@@ -10,6 +9,46 @@ export const rule: Rule.RuleModule = {
     },
   },
   create(context) {
+    const allVisitorKeys = context.getSourceCode().visitorKeys;
+
+    const hasCalledHook = (node: Rule.Node): boolean | "NA" => {
+      let fnName: string | undefined;
+      // Check for a standard fn call, like useEffect();
+      if (node.type === "CallExpression" && node.callee.type === "Identifier")
+        fnName = node.callee.name;
+      // Check for a first-level method call, like React.useEffect();
+      else if (
+        node.type === "CallExpression" &&
+        node.callee.type === "MemberExpression" &&
+        node.callee.property.type === "Identifier"
+      )
+        fnName = node.callee.property.name;
+
+      // If we've got a fn call at this point, we can break.
+      if (fnName && isHookName(fnName)) {
+        return true;
+      }
+
+      const visitorKeys = allVisitorKeys[node.type];
+      if (!visitorKeys) return "NA";
+
+      for (const key of visitorKeys) {
+        const child = node[key as keyof typeof node] as Rule.Node | Rule.Node[];
+
+        if (!child) continue;
+        else if (Array.isArray(child)) {
+          for (const item of child) {
+            const h = hasCalledHook(item);
+            if (h === true) return true;
+          }
+        } else {
+          return hasCalledHook(child);
+        }
+      }
+
+      return false;
+    };
+
     return {
       /**
        * We'll check Identifier nodes that have hook-like names, and then make sure they call another hook.
@@ -22,23 +61,8 @@ export const rule: Rule.RuleModule = {
         const body = getPotentialHookBody(node);
         if (!body) return;
 
-        // Traverse the fn body to see if we called another hook
-        let hasCalledHook = false;
-        traverse(context, body, (path) => {
-          if (path?.node?.type !== "CallExpression") return;
-
-          let fnName = path?.node?.callee?.name;
-          if (!fnName && path?.node?.callee?.type === "MemberExpression")
-            fnName = path?.node?.callee?.property?.name;
-
-          if (fnName && isHookName(fnName)) {
-            hasCalledHook = true;
-            return traverse.STOP;
-          }
-        });
-
         // No hook call? Naughty naughty
-        if (!hasCalledHook) {
+        if (!hasCalledHook(body)) {
           context.report({
             node,
             message: `This function does not call another hook. Avoiding the \`use\` prefix; consider the name \`${stripUsePrefix(
@@ -57,6 +81,7 @@ type IdentifierNode = Parameters<
 type VariableDeclaratorNode = Parameters<
   NonNullable<Rule.NodeListener["VariableDeclarator"]>
 >[0];
+type BodyType = NonNullable<ReturnType<typeof getPotentialHookBody>>;
 
 /**
  * same logic that Facebook uses: https://github.com/facebook/react/blob/e7c5af45ceb8fa2b64d39ec68345254ce9abd65e/packages/eslint-plugin-react-hooks/src/RulesOfHooks.js#L18-L23
