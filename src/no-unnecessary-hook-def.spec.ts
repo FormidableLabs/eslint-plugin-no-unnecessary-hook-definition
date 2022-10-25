@@ -77,7 +77,6 @@ ruleTester.run("foo", rule, {
     },
     {
       code: `function useName(person) {
-        useEffect();
     		return person.name
     	}`,
       errors: [{}],
