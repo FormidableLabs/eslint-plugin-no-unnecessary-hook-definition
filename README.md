@@ -1,4 +1,6 @@
-# `eslint-plugin-no-unnecessary-hook-definition`
+[![eslint-plugin-no-unnecessary-hook-definition — Formidable, We build the modern web](https://raw.githubusercontent.com/FormidableLabs/eslint-plugin-no-unnecessary-hook-definition/main/eslint-plugin-no-unnecessary-hook-definition-Hero.png)](https://formidable.com/open-source/)
+
+`eslint-plugin-no-unnecessary-hook-definition`
 
 This library contains a simple ESLint plugin with a single rule to disallow defining React "hooks" that perhaps shouldn't be considered "hooks". This library enforces the following rule:
 
